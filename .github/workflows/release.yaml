@@ -20,6 +20,13 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v2
 
+      - name: Set versions tag
+        run: |
+          sed -i "s/version = \"[0-9]\+.[0-9]\+.[0-9]\+\"/version = \"${{github.ref_name}}\"/" pyproject.toml
+          sed -i "s/__version__ = '[0-9]\+.[0-9]\+.[0-9]\+'/__version__ = '${{github.ref_name}}'/" app/__init__.py
+          sed -i "s/version: [0-9]\+.[0-9]\+.[0-9]\+/version: ${{github.ref_name}}/" charts/mutating-webhook-no-cpu-limit/Chart.yaml
+          sed -i "s/appVersion: [0-9]\+.[0-9]\+.[0-9]\+/appVersion: ${{github.ref_name}}/" charts/mutating-webhook-no-cpu-limit/Chart.yaml
+
       - name: Authenticate with Docker registry
         run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
 
