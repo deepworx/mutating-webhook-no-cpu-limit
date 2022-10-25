@@ -1,0 +1,44 @@
+{{/*
+We will use a self managed CA
+*/}}
+{{- $webhook_cert_common_name := printf "%s.%s.svc" (include "mutating-webhook-no-cpu-limit.fullname" .) .Release.Namespace -}}
+{{- $webhook_cert_ca := genCA $webhook_cert_common_name 3650 -}}
+{{- $webhook_cert := genSignedCert $webhook_cert_common_name nil (list $webhook_cert_common_name) 3650 $webhook_cert_ca -}}
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ template "mutating-webhook-no-cpu-limit.fullname" . }}
+  labels:
+    {{- include "mutating-webhook-no-cpu-limit.labels" . | nindent 4 }}
+type: kubernetes.io/tls
+data:
+  tls.crt: {{ $webhook_cert.Cert | b64enc | quote }}
+  tls.key: {{ $webhook_cert.Key | b64enc | quote }}
+  ca.crt: {{ $webhook_cert_ca.Cert | b64enc | quote }}
+
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: {{ template "mutating-webhook-no-cpu-limit.fullname" . }}
+  labels:
+    {{- include "mutating-webhook-no-cpu-limit.labels" . | nindent 4 }}
+webhooks:
+  - name: no-cpu-limit.deepworx.cloud
+    admissionReviewVersions: ["v1"]
+    sideEffects: None
+    timeoutSeconds: 2
+    failurePolicy: Ignore
+    clientConfig:
+      service:
+        name: {{ template "mutating-webhook-no-cpu-limit.fullname" . }}
+        namespace: {{ .Release.Namespace }}
+        path: /mutate
+      caBundle: {{ $webhook_cert_ca.Cert | b64enc | quote }}
+    rules:
+      - operations: ["CREATE"]
+        apiGroups: [""]
+        apiVersions: ["v1"]
+        resources: ["pods"]

@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "mutating-webhook-no-cpu-limit"
+version = "0.1.0"
+description = "Kubernetes Dynamic Admission Control which removes CPU limits when creating pods"
+authors = []
+
+[tool.poetry.dependencies]
+python = "^3.9"
+fastapi = "^0.78.0"
+uvicorn = "^0.17.6"
+structlog = "^21.5.0"
+PyYAML = "^6.0"
+bcrypt = "^3.2.2"
+jsonpatch = "^1.32"
+
+[tool.poetry.dev-dependencies]
+pytest = "^7.1.2"
+pylama = "^8.3.8"
+pylint = "^2.13.9"
+requests-mock = "^1.9.3"
+mock = "^4.0.3"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.isort]
+line_length=127
+sections=['FUTURE', 'STDLIB', 'THIRDPARTY', 'FIRSTPARTY', 'LOCALFOLDER']

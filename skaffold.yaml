@@ -1,0 +1,29 @@
+---
+apiVersion: skaffold/v2beta26
+kind: Config
+metadata:
+  name: mutating-webhook-no-cpu-limit
+
+build:
+  artifacts:
+    - image: deepworx/mutating-webhook-no-cpu-limit
+      context: .
+      docker:
+        dockerfile: ./compose/Dockerfile
+
+deploy:
+  helm:
+    releases:
+      - name: mutating-webhook-no-cpu-limit
+        namespace: mutating-webhook-no-cpu-limit
+        chartPath: charts/mutating-webhook-no-cpu-limit
+        artifactOverrides:
+          image: deepworx/mutating-webhook-no-cpu-limit
+        imageStrategy:
+          helm:
+            explicitRegistry: false
+
+portForward:
+  - resourceType: service
+    resourceName: mutating-webhook-no-cpu-limit
+    port: 443

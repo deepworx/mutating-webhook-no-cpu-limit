@@ -1,0 +1,56 @@
+---
+
+image:
+  repository: deepworx/mutating-webhook-no-cpu-limit
+  tag: ""
+  pullPolicy: IfNotPresent
+
+replicas: 1
+
+resources:
+  limits: {}
+  requests: {}
+service:
+  annotations: {}
+  clusterIP: ~
+  externalIPs: []
+  loadBalancerIP: ""
+  loadBalancerSourceRanges: []
+  type: ClusterIP
+  port: 443
+  nodePort: ""
+
+livenessProbe: {}
+
+readinessProbe:
+  initialDelaySeconds: 5
+  periodSeconds: 1
+  failureThreshold: 3
+  httpGet:
+    path: /healthz
+    scheme: HTTPS
+    port: http
+
+## Pod Annotations
+podAnnotations: {}
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podSecurityContext: {}
+
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+  readOnlyRootFilesystem: true
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+    - ALL
