@@ -31,7 +31,7 @@ spec:
             secretName: {{ template "mutating-webhook-no-cpu-limit.fullname" . }}
       containers:
         - name: {{ template "mutating-webhook-no-cpu-limit.name" . }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          image: "{{ .Values.image.repository }}:{{ default .Chart.AppVersion .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
