@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "mutating-webhook-no-cpu-limit"
-version = "0.1.0"
+version = "0.1.1"
 description = "Kubernetes Dynamic Admission Control which removes CPU limits when creating pods"
 authors = []
 
