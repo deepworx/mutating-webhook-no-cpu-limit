@@ -16,7 +16,7 @@ COPY pyproject.toml poetry.lock ./
 
 RUN if $DEV; then /bin/sh -c 'poetry export --without-hashes -f requirements.txt --dev | /venv/bin/pip install -r /dev/stdin'; else /bin/sh -c 'poetry export --without-hashes -f requirements.txt | /venv/bin/pip install -r /dev/stdin'; fi
 
-FROM python:3.10.7
+FROM python:3.10.7-slim
 
 RUN groupadd fastapi && useradd -g fastapi -s /bin/sh fastapi
 
