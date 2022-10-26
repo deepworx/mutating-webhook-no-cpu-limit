@@ -13,8 +13,8 @@ env:
 
 
 jobs:
-  build:
-    name: Build
+  docker:
+    name: Build and Release Docker Image
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
@@ -35,3 +35,29 @@ jobs:
 
       - name: Run skaffold build
         run: skaffold build
+
+  helm:
+    name: Release Helm Chart
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          path: 'source'
+
+      - uses: actions/checkout@v3
+        with:
+          repository: 'deepworx/helm-charts'
+          ssh-key: ${{ secrets.GA_SSH_KEY }}
+          path: 'helm-charts'
+
+      - name: Push local chart to helm-charts repo
+        run: |
+          rm -rf helm-charts/charts/mutating-webhook-no-cpu-limit
+          cp -r source/charts/mutating-webhook-no-cpu-limit  helm-charts/charts/mutating-webhook-no-cpu-limit
+
+          cd helm-charts
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add charts/mutating-webhook-no-cpu-limit
+          git commit -m 'Sync helm chart files'
+          git push
