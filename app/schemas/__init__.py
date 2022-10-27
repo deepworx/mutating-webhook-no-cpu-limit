@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from uuid import UUID
 
 from pydantic import BaseModel, Extra, Field
@@ -28,7 +28,8 @@ class PodSpec(BaseModel):
 
 
 class Metadata(BaseModel):
-    name: str
+    name: Optional[str]
+    generateName: Optional[str]
     namespace: str
 
     class Config:
@@ -47,8 +48,6 @@ class AdmissionObject(BaseModel):
 
 class AdmissionRequest(BaseModel):
     uid: UUID
-    name: str
-    namespace: str
     operation: str = Field('CREATE', const=True)
     object: AdmissionObject
 
