@@ -1,11 +1,7 @@
 ---
-
 name: Build & Release
 
-on:
-  push:
-    tags:
-      - '*'
+on: [push]
 
 jobs:
   docker:
@@ -52,6 +48,8 @@ jobs:
   helm:
     name: Release Helm Chart
     runs-on: ubuntu-latest
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
+    needs: docker
     steps:
       - uses: actions/checkout@v3
         with:
