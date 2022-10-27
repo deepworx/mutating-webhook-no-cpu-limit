@@ -16,7 +16,7 @@ router = APIRouter()
     response_model=AdmissionResponse,
     summary="Mutate Endpoint"
 )
-def tenant_auth_endpoint(request: AdmissionReview) -> None:
+def mutate_endpoint(request: AdmissionReview) -> None:
 
     spec = request.request.object
     modified_spec = spec.copy(deep=True)

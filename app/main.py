@@ -23,5 +23,5 @@ app.include_router(api_router)
 
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(request, exc):
-    log.error('invalid_data_received', details=exc.errors())
+    log.error('invalid_data_received', details=exc.errors(), body=exc.body)
     return await request_validation_exception_handler(request, exc)
