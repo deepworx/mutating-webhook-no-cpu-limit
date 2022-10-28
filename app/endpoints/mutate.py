@@ -21,7 +21,7 @@ def mutate_endpoint(request: AdmissionReview) -> None:
     spec = request.request.object
     modified_spec = spec.copy(deep=True)
 
-    namespace = spec.metadata.namespace
+    namespace = spec.metadata.namespace or request.request.namespace or '<unknown>'
     pod = spec.metadata.name or spec.metadata.generateName or '<unknown>'
 
     for container in modified_spec.spec.containers:

@@ -1,7 +1,7 @@
 
 
 ---
-name: Test & Lint
+name: Lint & Test
 on: [push, pull_request]
 
 jobs:
@@ -19,3 +19,4 @@ jobs:
           pip install poetry
           poetry install
           poetry run pylama
+          poetry run pytest

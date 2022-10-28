@@ -30,7 +30,7 @@ class PodSpec(BaseModel):
 class Metadata(BaseModel):
     name: Optional[str]
     generateName: Optional[str]
-    namespace: str
+    namespace: Optional[str]
 
     class Config:
         extra = Extra.allow
@@ -50,6 +50,7 @@ class AdmissionRequest(BaseModel):
     uid: UUID
     operation: str = Field('CREATE', const=True)
     object: AdmissionObject
+    namespace: Optional[str]
 
     class Config:
         extra = Extra.allow
